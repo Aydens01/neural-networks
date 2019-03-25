@@ -8,7 +8,7 @@
 
 ## Description
 
-Here you'll find some hand-made neuronal networks.
+Here you'll find some "hand-made" neuronal networks.
 
 ## License
 
