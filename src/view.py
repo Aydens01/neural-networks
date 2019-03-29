@@ -3,7 +3,7 @@
 
 """
 author  : Adrien Lafage\n
-date    : 25.03
+date    : 03.19
 Views
 =============
 Provides
@@ -69,7 +69,7 @@ class DataSet2D():
     
     def generate(self):
         data = []
-        for i in range(500):
+        for _ in range(self.size):
             value = (np.random.randint(self.mini, self.maxi, size=(1, 2)))[0]
             data.append(Data2D(value, self.fct(value)))
         return(data)

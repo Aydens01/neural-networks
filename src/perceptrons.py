@@ -126,6 +126,7 @@ class Perceptron(Formal_Neuron):
             n += 1
             for (ipt, thc) in zip(training_data, theorics):
                 prediction = self.activation(ipt)
+                # WARNING: ipt is an np.array
                 self.weights[1:] += self.learning_rate*(thc-prediction)*ipt
                 self.weights[0]  += self.learning_rate*(thc-prediction)
                 if prediction != thc:
@@ -140,33 +141,33 @@ class Perceptron(Formal_Neuron):
 
 if __name__=="__main__":
 
+    #>>> DEV TESTS <<<#
+
     # OR function
     def orFct(value):
         if (value[0]==1 or value[1]==1) :
             return(1)
         else:
             return(0)
-    
+
     # AND function
     def andFct(value):
         if (value[0]==1 and value[1]==1) :
             return(1)
         else:
             return(0)
-
+            
+    # Training sample definitions
     training_data1 = vw.DataSet2D(orFct, 0, 2, 10)
-
     training_data2 = vw.DataSet2D(andFct, 0, 2, 10)
-
+    # Load of the first sample
     values = [d.value for d in training_data1.data]
     labels = [d.label for d in training_data1.data]
-    
     # Perceptron training
     percep = Perceptron(2)
     print("Is perceptron training finished ?", percep.train(values, labels))
     # Perceptron testing
     testing_data = vw.DataSet2D(percep.activation, 0, 2, 50)
-
     # Graphic view of the test
     v = vw.View(testing_data.data, "A", "B")
     v.__print__()
