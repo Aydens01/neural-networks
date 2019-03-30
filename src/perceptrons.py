@@ -26,9 +26,6 @@ import view as vw
 #############| NOTES |##############
 """
 TODO: - clean the program
-      - modify the training function 
-      to divide a sample in more
-      than two classes
 """
 ####################################
 
@@ -39,16 +36,21 @@ TODO: - clean the program
 
 class Formal_Neuron():
     """ Formal neuron """
-    def __init__(self, size, threshold=0):
+    def __init__(self, size, threshold=0, iterations=50, learning_rate=0.01):
         """ Construct function of the formal neuron
 
         Parameters :
         ------------
             size {int} : input number \n
-            threshold {int} : activation function threshold
+            threshold {int} : activation function threshold\n
+            classes {int} : sample's division's number\n
+            iterations {int} : number of perceptron's training\n
+            learning_rate {float} : define the learning rate
         """
         self.threshold = threshold
         self.weights   = np.zeros(size+1)
+        self.iterations = iterations
+        self.learning_rate = learning_rate
     
     def aggregation(self, inputs):
         """ Aggregation function of the formal neuron
@@ -81,39 +83,15 @@ class Formal_Neuron():
             output = 0
         
         return(output)
-
-    def __print__(self):
-        """ Define print function for the formal neuron
-        """
-        model = "Neuron scheme\n"
-        for weight in self.weights:
-            model += "-| {} |-\n".format(weight)
-        print(model)
-
-class Perceptron(Formal_Neuron):
-    """ Perceptron with the Frank Rosenblatt learning rule"""
-    def __init__(self, size, classes=2, iterations=100, learning_rate=0.01):
-        """ Construct function of the perceptron (simple)
-
-        Parameters :
-        ------------
-            size {int} : input number\n
-            classes {int} : sample's division's number\n
-            iterations {int} : number of perceptron's training\n
-            learning_rate {float} : define the learning rate
-        """
-        Formal_Neuron.__init__(self, size)
-        self.iterations = iterations
-        self.learning_rate = learning_rate
     
-    def train(self, training_data, theorics):
-        """ Train the model by changing the weights
+    def train(self, training_data, labels):
+        """ Train the neuron by changing the weights
 
         Parameters :
         ------------
             training_data {np.array} : the data given to train the 
             perceptron\n
-            theorics {int} : the expected result for each individual
+            labels {int} : the expected result for each individual
         Output :
         ------------
             end {bool} : indicates if the perceptron has finished the
@@ -124,16 +102,68 @@ class Perceptron(Formal_Neuron):
         while end==False and n<self.iterations:
             end = True
             n += 1
-            for (ipt, thc) in zip(training_data, theorics):
+            for (ipt, lbl) in zip(training_data, labels):
                 prediction = self.activation(ipt)
                 # WARNING: ipt is an np.array
-                self.weights[1:] += self.learning_rate*(thc-prediction)*ipt
-                self.weights[0]  += self.learning_rate*(thc-prediction)
-                if prediction != thc:
+                self.weights[1:] += self.learning_rate*(lbl-prediction)*ipt
+                self.weights[0]  += self.learning_rate*(lbl-prediction)
+                if prediction != lbl:
                     # print the wrong classified data
                     # print(ipt)
                     end = False
         return(end)
+
+    def __print__(self):
+        """ Define print function for the formal neuron
+        """
+        threshold = str(np.round(self.weights[0], 3))
+        model = "Neuron scheme\nthreshold : "+threshold+"\n"
+        for weight in self.weights[1:]:
+            model += "-| {} |-\n".format(weight)
+        print(model)
+
+class Perceptron():
+    """Perceptron class"""
+    def __init__(self, size, classes=2):
+        """
+        """
+        self.size = size
+        self.classes = classes 
+        self.network = self.deploy(classes)
+    
+    def deploy(self, classes):
+        """ init the network
+        """
+        network = []
+        i = 0
+        while (2**i)<classes:
+            i+=1
+        for _ in range(i):
+            network.append(Formal_Neuron(self.size))
+        return(network)
+    
+    def activation(self, inputs):
+        """
+        """
+        output = []
+        for neuron in self.network:
+            output.append(neuron.activation(inputs))
+
+        return(output)
+
+    def train(self, training_data, labels):
+        """
+        """
+        end = True
+        for i in range(len(self.network)):
+            lbl = [label[i] for label in labels]
+            end *= self.network[i].train(training_data, lbl)
+        return(end)
+
+    def __print__(self):
+        print("------------------\nPERCEPTRON network\n------------------")
+        for neuron in self.network:
+            neuron.__print__()
 
 ####################################
 ############| PROGRAM |#############
@@ -143,31 +173,21 @@ if __name__=="__main__":
 
     #>>> DEV TESTS <<<#
 
-    # OR function
-    def orFct(value):
-        if (value[0]==1 or value[1]==1) :
-            return(1)
-        else:
-            return(0)
+    p = Perceptron(3, 5)
+    p.__print__()
 
-    # AND function
-    def andFct(value):
-        if (value[0]==1 and value[1]==1) :
-            return(1)
-        else:
-            return(0)
-            
-    # Training sample definitions
-    training_data1 = vw.DataSet2D(orFct, 0, 2, 10)
-    training_data2 = vw.DataSet2D(andFct, 0, 2, 10)
-    # Load of the first sample
-    values = [d.value for d in training_data1.data]
-    labels = [d.label for d in training_data1.data]
-    # Perceptron training
-    percep = Perceptron(2)
-    print("Is perceptron training finished ?", percep.train(values, labels))
-    # Perceptron testing
-    testing_data = vw.DataSet2D(percep.activation, 0, 2, 50)
-    # Graphic view of the test
-    v = vw.View(testing_data.data, "A", "B")
-    v.__print__()
+    
+    training_data = [np.array([255, 0, 0]),
+                     np.array([0, 255, 0]),
+                     np.array([0, 0, 255]),
+                     np.array([0, 0, 0]),
+                     np.array([255, 255, 255])]
+    labels = [[0, 0, 0],[0, 0, 1],[0, 1, 0],[0, 1, 1], [1, 0, 0]]
+
+    p.train(training_data, labels)
+    p.__print__()
+    print(p.activation(np.array([255, 0, 0])))
+    print(p.activation(np.array([0, 255, 0])))
+    print(p.activation(np.array([0, 0, 255])))
+    print(p.activation(np.array([0, 0, 0])))
+    print(p.activation(np.array([255, 255, 255])))

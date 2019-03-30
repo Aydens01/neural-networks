@@ -21,7 +21,6 @@ sys.path.append('../src')
 
 import numpy as np
 import unittest
-import view as vw
 import perceptrons as pct
 ####################################
 
@@ -46,7 +45,7 @@ class Percep_test(unittest.TestCase):
                          np.array([0, 1]),
                          np.array([1, 0]), 
                          np.array([1, 1])]
-        labels = [0, 1, 1, 1]
+        labels = [[0], [1], [1], [1]]
         # Perceptron initialization
         percep = pct.Perceptron(2)
         # Perceptron training
@@ -62,7 +61,7 @@ class Percep_test(unittest.TestCase):
         # Output given by the perceptron for the testing sample
         output = [percep.activation(data) for data in testing_data]
         # Output expected
-        expected = [1, 0, 0, 1, 1, 1, 0]
+        expected = [[1], [0], [0], [1], [1], [1], [0]]
         # Equality test
         self.assertEqual(output, expected)
     
@@ -78,7 +77,7 @@ class Percep_test(unittest.TestCase):
                          np.array([1, 1, 0]),
                          np.array([0, 1, 1]),
                          np.array([1, 1, 1])]
-        labels = [0, 1, 1, 1, 1, 1, 1, 1]
+        labels = [[0], [1], [1], [1], [1], [1], [1], [1]]
         # Perceptron initialization
         percep = pct.Perceptron(3)
         # Perceptron training
@@ -94,7 +93,7 @@ class Percep_test(unittest.TestCase):
         # Output given by the perceptron for the testing sample
         output = [percep.activation(data) for data in testing_data]
         # Output expected
-        expected = [1, 0, 0, 1, 1, 1, 0]
+        expected = [[1], [0], [0], [1], [1], [1], [0]]
         # Equality test
         self.assertEqual(output, expected)
 
@@ -106,7 +105,7 @@ class Percep_test(unittest.TestCase):
                          np.array([0, 1]),
                          np.array([1, 0]), 
                          np.array([1, 1])]
-        labels = [0, 0, 0, 1]
+        labels = [[0], [0], [0], [1]]
         # Perceptron initialization
         percep = pct.Perceptron(2)
         # Perceptron training
@@ -122,7 +121,7 @@ class Percep_test(unittest.TestCase):
         # Output given by the perceptron for the testing sample
         output = [percep.activation(data) for data in testing_data]
         # Output expected
-        expected = [1, 0, 0, 0, 0, 1, 0]
+        expected = [[1], [0], [0], [0], [0], [1], [0]]
         # Equality test
         self.assertEqual(output, expected)     
 
@@ -138,7 +137,7 @@ class Percep_test(unittest.TestCase):
                          np.array([1, 1, 0]),
                          np.array([0, 1, 1]),
                          np.array([1, 1, 1])]
-        labels = [0, 0, 0, 0, 0, 0, 0, 1]
+        labels = [[0], [0], [0], [0], [0], [0], [0], [1]]
         # Perceptron initialization
         percep = pct.Perceptron(3)
         # Perceptron training
@@ -154,7 +153,7 @@ class Percep_test(unittest.TestCase):
         # Output given by the perceptron for the testing sample
         output = [percep.activation(data) for data in testing_data]
         # Output expected
-        expected = [0, 0, 0, 0, 0, 1, 0]
+        expected = [[0], [0], [0], [0], [0], [1], [0]]
         # Equality test
         self.assertEqual(output, expected)
 
