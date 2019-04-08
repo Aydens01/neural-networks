@@ -26,6 +26,8 @@ import view as vw
 #############| NOTES |##############
 """
 TODO: - clean the program
+      - change the activation function
+        of the perceptron.
 """
 ####################################
 
@@ -36,7 +38,7 @@ TODO: - clean the program
 
 class Formal_Neuron():
     """ Formal neuron """
-    def __init__(self, size, threshold=0, iterations=50, learning_rate=0.01):
+    def __init__(self, size, threshold=0, iterations=200, learning_rate=0.01):
         """ Construct function of the formal neuron
 
         Parameters :
@@ -85,16 +87,16 @@ class Formal_Neuron():
         return(output)
     
     def train(self, training_data, labels):
-        """ Train the neuron by changing the weights
+        """ Trains the neuron by changing the weights
 
         Parameters :
         ------------
             training_data {np.array} : the data given to train the 
-            perceptron\n
-            labels {int} : the expected result for each individual
+            neuron\n
+            labels {int list} : the expected result for each individual
         Output :
         ------------
-            end {bool} : indicates if the perceptron has finished the
+            end {bool} : indicates if the neuron has finished the
             training.
         """
         end = False
@@ -113,26 +115,38 @@ class Formal_Neuron():
                     end = False
         return(end)
 
-    def __print__(self):
-        """ Define print function for the formal neuron
+    def __str__(self):
+        """ Defines print function for the formal neuron
         """
         threshold = str(np.round(self.weights[0], 3))
         model = "Neuron scheme\nthreshold : "+threshold+"\n"
         for weight in self.weights[1:]:
-            model += "-| {} |-\n".format(weight)
-        print(model)
+            model += "-| {} |-\n".format(np.round(weight, 3))
+        return(model)
 
 class Perceptron():
-    """Perceptron class"""
+    """Perceptron with one layer"""
     def __init__(self, size, classes=2):
-        """
+        """ Construct function of the perceptron
+
+        Parameters :
+        ------------
+            size {int} : input number \n
+            classes {int} : number of classes
         """
         self.size = size
         self.classes = classes 
         self.network = self.deploy(classes)
     
     def deploy(self, classes):
-        """ init the network
+        """ Initialize the neuronal network
+
+        Parameters :
+        ------------
+            classes {int} : number of classes
+        Output :
+        --------
+            output {Formal_Neuron list}
         """
         network = []
         i = 0
@@ -141,9 +155,16 @@ class Perceptron():
         for _ in range(i):
             network.append(Formal_Neuron(self.size))
         return(network)
-    
+
     def activation(self, inputs):
-        """
+        """ Activation function of the perceptron
+
+        Parameters :
+        ------------
+            inputs {np.array} : perceptron inputs
+        Output :
+        --------
+            output {list}
         """
         output = []
         for neuron in self.network:
@@ -152,18 +173,33 @@ class Perceptron():
         return(output)
 
     def train(self, training_data, labels):
+        """ Trains the perceptron by changing the 
+        neuron's weights of the network
+
+        Parameters :
+        ------------
+            training_data {np.array} : the data given 
+            to train the perceptron\n
+            labels {int list list} : the expected result
+            each individual
+        Output :
+        --------
+            end {bool} : indicates if the perceptron has finished the
+            training.
         """
-        """
-        end = True
+        end = True #FIXME: change init value
         for i in range(len(self.network)):
             lbl = [label[i] for label in labels]
             end *= self.network[i].train(training_data, lbl)
         return(end)
 
-    def __print__(self):
-        print("------------------\nPERCEPTRON network\n------------------")
+    def __repr__(self):
+        """ Defines print function for the perceptron
+        """
+        model = "------------------\nPERCEPTRON network\n------------------\n"
         for neuron in self.network:
-            neuron.__print__()
+            model += str(neuron)
+        return(model)
 
 ####################################
 ############| PROGRAM |#############
@@ -172,22 +208,28 @@ class Perceptron():
 if __name__=="__main__":
 
     #>>> DEV TESTS <<<#
-
-    p = Perceptron(3, 5)
-    p.__print__()
-
+    p = Perceptron(3, 4)
+    print(p)
     
     training_data = [np.array([255, 0, 0]),
                      np.array([0, 255, 0]),
                      np.array([0, 0, 255]),
-                     np.array([0, 0, 0]),
-                     np.array([255, 255, 255])]
-    labels = [[0, 0, 0],[0, 0, 1],[0, 1, 0],[0, 1, 1], [1, 0, 0]]
+                     np.array([0, 0, 0])]
+
+    labels = [[0, 0],[0, 1],[1, 0],[1, 1]]
 
     p.train(training_data, labels)
-    p.__print__()
+    print(p)
     print(p.activation(np.array([255, 0, 0])))
     print(p.activation(np.array([0, 255, 0])))
     print(p.activation(np.array([0, 0, 255])))
     print(p.activation(np.array([0, 0, 0])))
-    print(p.activation(np.array([255, 255, 255])))
+    #print(p.activation(np.array([255, 255, 255])))
+
+    print("Approximations")
+
+    print(p.activation(np.array([15, 0, 0])))
+    print(p.activation(np.array([0, 200, 0])))
+    print(p.activation(np.array([0, 0, 190])))
+    print(p.activation(np.array([0, 0, 0])))
+
