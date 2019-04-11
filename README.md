@@ -4,7 +4,7 @@
 
 **Date :** 03.19
 
-**Subject :** neuronal network library
+**Subject :** neural network library
 
 ## Description
 
