@@ -1,4 +1,4 @@
-# neuronal-networks
+# neural-networks
 
 **Author :** Adrien Lafage
 
@@ -8,7 +8,7 @@
 
 ## Description
 
-Here you'll find some "hand-made" neuronal networks.
+Here you'll find some "hand-made" neural networks.
 
 ## License
 
