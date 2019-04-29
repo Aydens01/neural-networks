@@ -3,13 +3,15 @@
 
 """
 author  : Adrien Lafage\n
-date    : 03.19
+date    : 04.19
 Formal Neuron Unitary Tests
 =============
 Provides
-
+    - Unitary tests for Formal neuron
 
 Documentation
+
+You can find it here <https://github.com/Aydens01/neural-networks/blob/dev/doc/fneuron.md>`_
 -------------
 ...
 """
@@ -38,7 +40,7 @@ TODO:
 class Fneuron_test(unittest.TestCase):
     """Unitary tests for formal neuron"""
     def test_heaviside(self):
-        """ heaviside activation function test 
+        """ Heaviside activation function test 
         """
         # formal neuron init
         neuron = fn.Fneuron(2, np.array([10, 1, -1]))
@@ -64,7 +66,7 @@ class Fneuron_test(unittest.TestCase):
         self.assertEqual(output, expected)
 
     def test_sigmoid(self):
-        """ sigmoid activation function test
+        """ Sigmoid activation function test
         """
         # formal neuron init
         neuron = fn.Fneuron(2, np.array([10,1,-1]))
@@ -88,6 +90,8 @@ class Fneuron_test(unittest.TestCase):
         output = neuron.sigmoid(np.array([0, 10]), 1000)
         expected = 0.5
         self.assertEqual(output, expected)
+
+
 ####################################
 ############| PROGRAM |#############
 ####################################
@@ -95,9 +99,4 @@ class Fneuron_test(unittest.TestCase):
 if __name__ == "__main__":
     # run all the tests
     unittest.main()
-    """
-    n = fn.Fneuron(2, np.array([-2,1,1]))
-    output = n.sigmoid(np.array([100, 0]), 10)
-    print(output==1.0)
-    """
 

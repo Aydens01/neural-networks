@@ -7,11 +7,11 @@ date    : 03.19
 Formal neuron
 =============
 Provides
-    1. A formal neuron
+    - A formal neuron
 
 Documentation
 -------------
-...
+You can find it here <https://github.com/Aydens01/neural-networks/blob/dev/doc/fneuron.md>
 """
 
 ############| IMPORTS |#############
@@ -24,8 +24,7 @@ import view as vw
 
 #############| NOTES |##############
 """
-TODO: - clean the program
-      - make some unit tests
+TODO:
 """
 ####################################
 
@@ -52,7 +51,7 @@ class Fneuron():
 
         Parameters :
         ------------
-            inputs {np.array} : formal neuron
+            inputs {np.array} : formal neuron inputs
         Output :
         --------
             output {int}
@@ -76,7 +75,8 @@ class Fneuron():
         Probabilistic interpretation
         Parameters :
         ------------
-            inputs {np.array} : formal neuron inputs
+            inputs {np.array} : formal neuron 
+            a {int} : tilt coefficient
         Output :
         --------
             output {int}
@@ -84,7 +84,14 @@ class Fneuron():
         return(1/(1+np.exp(-a*self.aggregation(inputs))))
 
     def __repr__(self):
-        pass
+        """ Formal neuron representation
+        """
+        view = "_______________________\n"
+        view += "     Formal Neuron     \n\n"
+        for i in range(len(self.weights)):
+            view += "w"+str(i)+" : "+str(self.weights[i])+"\n"
+        view += "_______________________\n"
+        return(view) 
 
 ####################################
 ############| PROGRAM |#############
@@ -93,6 +100,5 @@ class Fneuron():
 if __name__=="__main__":
 
     #>>> DEV TESTS <<<#
-    neuron = Fneuron(2, np.array([10,1,-1]))
-    print(neuron.sigmoid(np.array([50, 60]), 1000))
-
+    print(Fneuron(2, np.array([10, 1, -1])))
+    pass
