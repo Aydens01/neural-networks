@@ -68,7 +68,7 @@ class Fneuron():
         """
         return(1.0 if self.aggregation(inputs)>=0 else 0.0)
     
-    def sigmoid(self, inputs, a):
+    def sigmoid(self, inputs, a=1000):
         """ Sigmoid activation function\n
         Probabilistic interpretation
         Parameters :
