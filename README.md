@@ -13,4 +13,3 @@ Here you'll find some "hand-made" neural networks.
 ## License
 
 ## Summary
-

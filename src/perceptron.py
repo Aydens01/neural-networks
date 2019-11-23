@@ -18,12 +18,14 @@ You can find it here <https://github.com/Aydens01/neural-networks/blob/dev/doc/p
 import os
 import sys
 import numpy as np
+import fneuron as fn
 ####################################
 
 
 #############| NOTES |##############
 """
-todo: __repr__ function
+TODO: __repr__ function
+      checking of init parameters
 """
 ####################################
 
@@ -34,20 +36,20 @@ todo: __repr__ function
 
 class Perceptron():
     "Perceptron"
-    def __init__(self, size_in, size_out, weights=np.array([])):
+    def __init__(self, size_in, size_out, fneurons):
         """ Construct function of the perceptron
 
         Parameters :
         ------------
             size {int} : number of inputs\n
             size_out {int} :number of outputs\n
-            weights {np.matrix} : array of the formal neuron weights
+            fneuron {Fneuron list} : list of formal neuron
         """
         self.size_in = size_in
         self.size_out = size_out
-        self.weights = np.zeros((size_out, size_in+1)) if weights.shape != (size_out, size_in+1) else weights
+        self.fneurons = fneurons
         
-    
+    '''
     def aggregation(self, inputs):
         """ Aggregation function of the perceptron
 
@@ -60,17 +62,41 @@ class Perceptron():
         """
         inputs = np.insert(inputs, 0, 1)
         return(np.dot(self.weights, inputs))
+    '''
+
+    def compute(self, inputs, decision_fct=fn.Fneuron.sigmoid):
+        """ Computing function of the perceptron
+        using formal neurons
+        Parameters :
+        ------------
+            inputs {np.array} : perceptron inputs
+        Output :
+        --------
+            outputs {np.array}
+        """
+        outputs = np.array([])
+        for neuron in self.fneurons:
+            outputs = np.append(outputs, decision_fct(neuron, inputs))
+
+        return(outputs)
+
 
     def heaviside(self, inputs):
         """ Heaviside activation function
+        Parameters : 
+        ------------
+            inputs {np.array} : perceptron inputs
+        Output : 
+            output {np.array}
         """
-        outputs = ''
-        agg = self.aggregation(inputs)
-        for i in range(self.size_out):
-            outputs += '1' if agg[i]>0 else '0'
-        # return(outputs)
-        # tmp 
-        return(int(str(outputs), 2))
+        outputs = np.array([])
+        for neuron in self.fneurons:
+            outputs = np.append(outputs, neuron.heaviside(inputs))
+
+        return(outputs)
+    
+    def sigmoid(self, inputs):
+        pass
 
     def softmax(self, inputs):
         """ Soft-max activation function
@@ -84,9 +110,14 @@ class Perceptron():
             outputs {np.array}
         """
         outputs = np.zeros(self.size_out)
+        for i in range(len(self.fneurons)):
+            outputs[i] = np.exp(self.fneurons[i].aggregation(inputs))
+        outputs = outputs/sum(outputs)
+        '''
         agg = self.aggregation(inputs)
         for i in range(self.size_out):
             outputs[i] = np.exp(agg[i])/sum(np.exp(agg))
+        '''
         return(outputs)
     
     def prediction(self, inputs):
@@ -99,7 +130,7 @@ class Perceptron():
             index {int}
         """
         outputs = self.softmax(inputs)
-        #//print(outputs)
+        # print(outputs)
         index = np.argmax(outputs)
         
         return(index)
@@ -112,7 +143,7 @@ class Perceptron():
         """
         status = "_______________________\n"
         status += "      Perceptron      \n\n"
-        #TODO:
+        #TODO: display the perceptron's weigths
         status += "_______________________\n"
         return(status)
 
@@ -123,5 +154,6 @@ class Perceptron():
 if __name__=="__main__":
 
     #>>> DEV TESTS <<<#
-    pass
+    p = Perceptron(2, 1, [fn.Fneuron(2, np.array([10, 1, -1]))])
+    print(p.heaviside(np.array([0, 100])))
     

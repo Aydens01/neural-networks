@@ -7,7 +7,21 @@ date    : 03.19
 Formal neuron
 =============
 Provides
-    - A formal neuron
+-------------
+    - Initialization of the formal neuron
+    - Aggregation function
+    - Some decision functions : Heaviside and Sigmoid
+
+Using
+-------------
+```py
+# creation
+neuron = Fneuron(size, weights)
+# use heaviside decision function
+neuron.heaviside(inputs)
+# use sigmoid decision function
+neuron.sigmoid(inputs, a)
+```
 
 Documentation
 -------------
@@ -23,7 +37,7 @@ import numpy as np
 
 #############| NOTES |##############
 """
-TODO:
+OK
 """
 ####################################
 
@@ -64,20 +78,20 @@ class Fneuron():
             inputs {np.array} : formal neuron inputs
         Output :
         --------
-            output {int}
+            output {float} : result of the neuron with these inputs and this decision function.
         """
         return(1.0 if self.aggregation(inputs)>=0 else 0.0)
     
     def sigmoid(self, inputs, a=1000):
         """ Sigmoid activation function\n
-        Probabilistic interpretation
+        Probabilistic interpretation.
         Parameters :
         ------------
             inputs {np.array} : formal neuron 
             a {int} : tilt coefficient
         Output :
         --------
-            output {int}
+            output {int} : result of the neuron with these inputs and this decision function
         """
         return(1/(1+np.exp(-a*self.aggregation(inputs))))
 

@@ -23,7 +23,8 @@ sys.path.append('../src')
 
 import numpy as np
 import unittest
-import perceptron as fn
+import fneuron as fn
+import perceptron as pct
 ####################################
 
 #############| NOTES |##############
@@ -36,9 +37,67 @@ todo: write some tests
 ############| CLASSES |#############
 ####################################
 
-class Fneuron_test(unittest.TestCase):
-    """Unitary tests for formal neuron"""
+class Perceptron_test(unittest.TestCase):
+    """Unitary tests for perceptron"""
     # ? what test could be relevant?
+    def testAND_heaviside(self):
+        """ Perceptron as an AND logic
+        with heaviside function
+        """
+        # weight initialization
+        w1 = np.array([-3, 2, 2])
+        # AND logic perceptron
+        perceptron = pct.Perceptron(2, 1, [fn.Fneuron(2, w1)])
+        output = perceptron.heaviside(np.array([0, 0]))
+        expected = np.array([0.0])
+        self.assertEqual(output, expected)
+        # second test
+        output = perceptron.heaviside(np.array([1, 0]))
+        expected = np.array([0.0])
+        self.assertEqual(output, expected)
+        # third test
+        output = perceptron.heaviside(np.array([0, 1]))
+        expected = np.array([0.0])
+        self.assertEqual(output, expected)
+        # fourth test
+        output = perceptron.heaviside(np.array([1, 1]))
+        expected = np.array([1.0])
+        self.assertEqual(output, expected)
+    
+    def testOR_heaviside(self):
+        """ Perceptron as an OR logic
+        with heaviside function
+        """
+        # weight initialization
+        w1 = np.array([-1, 2, 2])
+        # OR logic fneuron
+        perceptron = pct.Perceptron(2, 1, [fn.Fneuron(2, w1)])
+        # first test
+        output = perceptron.heaviside(np.array([0, 0]))
+        expected = np.array([0.0])
+        self.assertEqual(output, expected)
+        # second test
+        output = perceptron.heaviside(np.array([1, 0]))
+        expected = np.array([1.0])
+        self.assertEqual(output, expected)
+        # third test
+        output = perceptron.heaviside(np.array([0, 1]))
+        expected = np.array([1.0])
+        self.assertEqual(output, expected)
+        # fourth test
+        output = perceptron.heaviside(np.array([1, 1]))
+        expected = np.array([1.0])
+        self.assertEqual(output, expected)
+    
+    def testAND_sigmoid(self):
+        """ Perceptron as an AND logic
+        with sigmoid function
+        """
+        # weight initialization
+        w1 = np.array([-1, 2, 2])
+        # OR logic fneuron
+        perceptron = pct.Perceptron(2, 1, [fn.Fneuron(2, w1)])
+        pass
 
 
 ####################################
@@ -47,5 +106,4 @@ class Fneuron_test(unittest.TestCase):
 
 if __name__ == "__main__":
     # run all the tests
-    #//unittest.main()
-    pass
+    unittest.main()
