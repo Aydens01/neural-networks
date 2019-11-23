@@ -47,10 +47,10 @@ class Data2D():
         self.value = value
         self.label = label
 
-    def __print__(self):
+    def __repr__(self):
         """ Define the print function for Data2D
         """
-        print("value : {}, label : {}".format(self.value, self.label))
+        return("value : {}, label : {}".format(self.value, self.label))
 
 
 class DataSet2D():
@@ -87,9 +87,19 @@ class View():
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.sample = sample
+    
+    def test(self, label):
 
-    def __print__(self):
-        cmap = 'brcmykwg' #FIXME: allows only 9 colors
+        cmap = 'wbrcmykg'
+        for d in self.sample:
+            plt.scatter(d.value[0], d.value[1], s=None, c=cmap[1 if d.label == label else 2])
+            
+        plt.xlabel(self.xlabel+" axis")
+        plt.ylabel(self.ylabel+" axis")
+        plt.show()
+
+    def __show__(self):
+        cmap = 'wbrcmykg' #FIXME: allows only 9 colors
 
         for d in self.sample:
             plt.scatter(d.value[0], d.value[1], s=None, c=cmap[int(d.label)])
